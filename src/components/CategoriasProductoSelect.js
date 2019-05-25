@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { Field } from 'formik'
 import axios from 'axios'
-import {URL,token} from "./../config/config"
+import {URL,TOKEN} from "./../config/config"
 
 class CategoriasProductoSelect extends Component {
 
@@ -18,7 +18,7 @@ class CategoriasProductoSelect extends Component {
             method: 'get',
             url: URL+'/categories/select',
             headers: {
-              "Authorization": 'bearer '+token,
+              "Authorization": 'bearer '+TOKEN,
             }
           }).then( (response) => {
                 let datos = response.data;
