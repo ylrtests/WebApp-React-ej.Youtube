@@ -37,8 +37,8 @@ class Producto extends Component {
         });
     }
 
-    listarProductos(producto){
-        return(
+    listarProductos(producto) {
+        return (
             <tr key={producto.id}>
                 <th>{producto.id}</th>
                 <td>{producto.name}</td>
@@ -53,13 +53,26 @@ class Producto extends Component {
         )
     }
 
+
+    cargarIconoEspera() {
+        return (
+            <tr>
+                <td colspan="7" className="text-center">
+                    <object width="100" height="100" type="image/svg+xml" data="img/loading.svg">
+                        Your browser does not support SVG
+                    </object>
+                </td>
+            </tr>
+        )
+    }
+
     render() {
 
         let listaProductos;
 
         console.log(this.state.productos)
 
-        if(this.state.productos.length > 0){
+        if (this.state.productos.length > 0) {
             listaProductos = this.state.productos.map(this.listarProductos)
         }
 
@@ -68,7 +81,7 @@ class Producto extends Component {
                 <div className="row">
                     <h1>Lista de productos</h1>
                 </div>
-                
+
                 <div className="row">
                     <Table bordered striped>
                         <thead>
@@ -83,11 +96,11 @@ class Producto extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {!listaProductos? "Cargando...":listaProductos}
+                            {!listaProductos ? this.cargarIconoEspera() : listaProductos}
                         </tbody>
                     </Table>
                 </div>
-                
+
             </div>
         )
     }
