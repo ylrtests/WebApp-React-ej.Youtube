@@ -31,9 +31,7 @@ class Navigation extends Component {
         return (
             <div>
                 <Navbar color="light" light expand="md">
-                    <NavbarBrand>
-                        <Link to="/">MiAppReact-Laravel</Link>
-                    </NavbarBrand>
+                    <NavbarBrand href="/">MiAppReact-Laravel</NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
