@@ -2,6 +2,7 @@
   "name": "app-react-laravelapi",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://API-Rest-Laravel-YS:8080/api",
   "dependencies": {
     "axios": "^0.18.0",
     "boostrap": "^2.0.0",

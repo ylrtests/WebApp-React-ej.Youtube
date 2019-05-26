@@ -100,6 +100,10 @@ class Producto extends Component {
 
     }
 
+    editarProducto(productoId){
+        this.props.history.push('/producto/modificar/'+productoId)
+    }
+
     listarProductos(producto) {
         return (
             <tr key={producto.id}>
@@ -115,19 +119,21 @@ class Producto extends Component {
                             producto.status === 1 ?
                                 <div className="col-6">
                                     <button className="btn btn-danger "
-                                        onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Inactivar
-                                </button>
+                                            onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Inactivar
+                                    </button>
                                 </div>
                                 :
                                 <div className="col-6">
                                     <button className="btn btn-success "
-                                        onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Activar
-                                </button>
+                                            onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Activar
+                                    </button>
                                 </div>
                         }
 
                         <div className="col-6">
-                            <button className="btn btn-primary ">Editar</button>
+                            <button className="btn btn-primary "
+                                    onClick={() => {this.editarProducto(producto.id)}}>Editar
+                            </button>
                         </div>
                     </div>
                 </td>
