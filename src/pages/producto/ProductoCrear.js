@@ -1,10 +1,10 @@
 import React, { Component } from "react"
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import CategoriasProductoSelect from "../../components/CategoriasProductoSelect";
+import { Formik, Form, Field } from 'formik'
+import * as Yup from 'yup'
+import CategoriasProductoSelect from "../../components/CategoriasProductoSelect"
 import axios from 'axios'
 import { URL, TOKEN} from "./../../config/config"
-import SweetAlert from 'sweetalert-react';
+import SweetAlert from 'sweetalert-react'
 
 // Esquema de validaciones
 const ProductoSchema = Yup.object().shape({

@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import axios from 'axios'
 import { URL, TOKEN } from "./../../config/config"
-import { Table } from 'reactstrap';
+import { Table } from 'reactstrap'
+import SweetAlert from 'sweetalert-react'
+
 
 class Producto extends Component {
 
@@ -9,13 +11,24 @@ class Producto extends Component {
         super(props)
 
         this.state = {
-            productos: []
+            productos: [],
+            showSweetAlert: false,
+            sweetTitle: '',
+            sweetText: '',
+            sweetType: ''
         }
 
         this.listarProductos = this.listarProductos.bind(this)
+        this.getProductos = this.getProductos.bind(this)
+        this.cambiarEstadoProducto = this.cambiarEstadoProducto.bind(this)
+
     }
 
     componentDidMount() {
+        this.getProductos()
+    }
+
+    getProductos() {
         axios({
             method: 'get',
             url: URL + '/product',
@@ -37,6 +50,56 @@ class Producto extends Component {
         });
     }
 
+    cambiarEstadoProducto(productoId) {
+
+        axios({
+            method: 'put',
+            url: URL + '/product/update/status/' + productoId,
+            headers: {
+                "Authorization": 'bearer ' + TOKEN,
+            }
+        }).then((response) => {
+            let datos = response.data;
+
+            if (datos.success) {
+                console.log(datos);
+                this.setState({
+                    sweetShow: true,
+                    sweetTitle: 'Mensaje',
+                    sweetText: datos.message
+                })
+
+
+                // Busca Index del producto al que se debe actualizar el estado.
+                const index = this.state.productos.findIndex((item) => {
+                    return item.id === productoId
+                })
+
+                // Encuentra el producto dentro de la lista de this.state.productos
+                // Para posteriormente actualizarlo.
+                // --> Usando la funcion de JSON, hace un deep copy del objeto
+                let producto = JSON.parse(JSON.stringify(this.state.productos[index]));
+                producto.status = producto.status === 1 ? 0 : 1
+
+
+                //let updatedProductos = Object.assign([],this.state.productos)
+                let updatedProductos = JSON.parse(JSON.stringify(this.state.productos));
+                updatedProductos[index] = producto
+
+                this.setState({
+                    productos: updatedProductos
+                })
+
+            }
+            else {
+                console.log("success falso");
+            }
+
+        });
+
+
+    }
+
     listarProductos(producto) {
         return (
             <tr key={producto.id}>
@@ -46,20 +109,37 @@ class Producto extends Component {
                 <td>{producto.quantity}</td>
                 <td>{producto.category.name}</td>
                 <td>{producto.status === 1 ? 'Activo' : 'Inactivo'}</td>
-                <td>
+                <td className="text-center">
+                    <div className="row">
+                        {
+                            producto.status === 1 ?
+                                <div className="col-6">
+                                    <button className="btn btn-danger "
+                                        onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Inactivar
+                                </button>
+                                </div>
+                                :
+                                <div className="col-6">
+                                    <button className="btn btn-success "
+                                        onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Activar
+                                </button>
+                                </div>
+                        }
 
+                        <div className="col-6">
+                            <button className="btn btn-primary ">Editar</button>
+                        </div>
+                    </div>
                 </td>
             </tr>
         )
     }
 
-
     cargarIconoEspera() {
         return (
             <tr>
-                <td colspan="7" className="text-center">
+                <td colSpan="7" className="text-center">
                     <object width="100" height="100" type="image/svg+xml" data="img/loading.svg">
-                        Your browser does not support SVG
                     </object>
                 </td>
             </tr>
@@ -67,10 +147,7 @@ class Producto extends Component {
     }
 
     render() {
-
         let listaProductos;
-
-        console.log(this.state.productos)
 
         if (this.state.productos.length > 0) {
             listaProductos = this.state.productos.map(this.listarProductos)
@@ -83,16 +160,23 @@ class Producto extends Component {
                 </div>
 
                 <div className="row">
+                    <SweetAlert
+                        show={this.state.sweetShow}
+                        title={this.state.sweetTitle}
+                        text={this.state.sweetText}
+                        success
+                        onConfirm={() => this.setState({ sweetShow: false })}
+                    />
                     <Table bordered striped>
                         <thead>
                             <tr>
-                                <td>#</td>
-                                <td>Nombre</td>
-                                <td>Precio</td>
-                                <td>Cantidad</td>
-                                <td>Categoria</td>
-                                <td>Estado</td>
-                                <td>Acciones</td>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Categoria</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
