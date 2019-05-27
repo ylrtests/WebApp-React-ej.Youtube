@@ -16,7 +16,7 @@ class App extends Component {
       
       <div>
         <BrowserRouter>
-          {/* <Navigation /> */}
+          <Navigation />
           <Routes />
         </BrowserRouter>
       </div>

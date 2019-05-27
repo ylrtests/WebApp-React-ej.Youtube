@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import axios from 'axios'
-import { URL, TOKEN } from "./../../config/config"
+import { URL, getToken } from "./../../config/config"
 import { Table } from 'reactstrap'
 import SweetAlert from 'sweetalert-react'
 
@@ -33,7 +33,7 @@ class Producto extends Component {
             method: 'get',
             url: URL + '/product',
             headers: {
-                "Authorization": 'bearer ' + TOKEN,
+                "Authorization": 'bearer ' + getToken(),
             }
         }).then((response) => {
             let datos = response.data;
@@ -56,7 +56,7 @@ class Producto extends Component {
             method: 'put',
             url: URL + '/product/update/status/' + productoId,
             headers: {
-                "Authorization": 'bearer ' + TOKEN,
+                "Authorization": 'bearer ' + getToken(),
             }
         }).then((response) => {
             let datos = response.data;

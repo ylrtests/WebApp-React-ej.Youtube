@@ -4,7 +4,6 @@ import {
     Collapse,
     Navbar,
     NavbarToggler,
-    NavbarBrand,
     Nav,
     NavItem
 } from 'reactstrap';
@@ -31,7 +30,11 @@ class Navigation extends Component {
         return (
             <div>
                 <Navbar color="light" light expand="md">
-                    <NavbarBrand href="/">MiAppReact-Laravel</NavbarBrand>
+                <Nav className="ml-auto" navbar>
+                    <NavItem>
+                        <Link className="nav-link" to="/">App</Link>
+                    </NavItem>
+                </Nav>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>

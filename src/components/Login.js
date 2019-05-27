@@ -1,6 +1,6 @@
 import React,{Component} from "react"
 import axios from 'axios'
-import { URL, TOKEN} from "./../config/config"
+import { URL } from "./../config/config"
 
 class Login extends Component {
 
@@ -36,6 +36,9 @@ class Login extends Component {
             let datos = response.data;
             console.log(datos)
             localStorage.setItem('jwt',datos.token)
+            this.props.history.go('/')
+            this.props.history.push('/')
+            
         });
     }
 

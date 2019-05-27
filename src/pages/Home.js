@@ -1,11 +1,20 @@
 import React from "react"
 
-class Home extends React.Component{
+class Home extends React.Component {
 
-    render(){
-        return(
+    constructor(props) {
+        super(props)
+
+        this.state = {
+
+        }
+    }
+
+    render() {
+
+        return (
             <div>
-                Home
+                Home 
             </div>
         )
     }

@@ -3,7 +3,7 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import CategoriasProductoSelect from "../../components/CategoriasProductoSelect"
 import axios from 'axios'
-import { URL, TOKEN} from "./../../config/config"
+import { URL, getToken} from "./../../config/config"
 import SweetAlert from 'sweetalert-react'
 
 // Esquema de validaciones
@@ -42,7 +42,7 @@ class ProductoCrear extends Component {
             method: 'post',
             url: URL + '/product',
             headers: {
-                "Authorization": 'bearer '+TOKEN
+                "Authorization": 'bearer '+getToken()
             },
             data: values
         }).then((response) => {

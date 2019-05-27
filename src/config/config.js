@@ -1,2 +1,4 @@
 export const URL = "http://API-Rest-Laravel-YS:8080/api"
-export const TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGktcmVzdC1sYXJhdmVsLXlzOjgwODBcL2FwaVwvbG9naW4iLCJpYXQiOjE1NTg4ODc1NDMsImV4cCI6MTU1ODkwOTE0MywibmJmIjoxNTU4ODg3NTQzLCJqdGkiOiJUcnJoenJ6OGlkRWx5TUxUIiwic3ViIjoxMCwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.bwhDZDLkYDjNAMtZl0tVjDYSLCAHQ0etmuLqnta15AU"
+export const getToken = () => {
+    return localStorage.getItem("jwt")
+}

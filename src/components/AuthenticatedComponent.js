@@ -1,22 +1,73 @@
-import React,{Component} from "react"
+import React, { Component } from "react"
+import { getToken, URL } from "./../config/config"
+import axios from "axios"
 
 
-class AuthenticatedComponent extends Component{
-    //Hacer proxy en package
+class AuthenticatedComponent extends Component {
+   
+    componentDidMount() {
 
-    constructor(props){
-        super(props)
+        const jwt = getToken()
 
-        this.state = {
-            user: undefined
+        if (!jwt) {
+            this.props.changeEstadoUsuario({
+                userIsVerified: false,
+                isLoading: false,
+                user: undefined
+            })
+        }
+        else {
+            axios({
+                method: 'post',
+                url: URL + "/user",
+                data: {
+                    "token": jwt
+                }
+            }).then((response) => {
+                let datos = response.data
+
+                //Verificación de usuario exitosa
+                if (datos.success) {
+                    this.props.changeEstadoUsuario({
+                        userIsVerified: true,
+                        isLoading: false,
+                        user: datos.user
+                    })
+                }
+
+                //No se ha verificado usuario
+                else {
+                    localStorage.removeItem('jwt')
+                    this.props.changeEstadoUsuario({
+                        userIsVerified: false,
+                        isLoading: false,
+                        user: undefined
+                    })
+                }
+
+            }).catch(err => {
+                console.log('Error autenticando usuario' + err)
+            })
         }
     }
-    render(){
-        return(
-            <div>
-                Auth
-            </div>
-        )
+
+    render() {
+        if(this.props.isLoading){
+            console.log("Verificando usuario...")
+            return(
+                <div>
+                    Loading...
+                </div>
+            )
+        }
+        else{
+            console.log("Ya cargue rutas...")
+           return(
+               <div>
+                   {this.props.children}
+               </div>
+           )
+        }
     }
 }
 
