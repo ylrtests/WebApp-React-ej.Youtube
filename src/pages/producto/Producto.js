@@ -5,7 +5,6 @@ import { Table } from 'reactstrap'
 import SweetAlert from 'sweetalert-react'
 import LoadingIcon from "./../../components/LoadingIcon"
 
-
 class Producto extends Component {
 
     constructor(props) {
@@ -48,7 +47,8 @@ class Producto extends Component {
             else {
                 //console.log("success falso");
             }
-
+        }).catch( (err) => {
+            this.props.history.push("/logout")
         });
     }
 
@@ -193,7 +193,6 @@ class Producto extends Component {
                         </tbody>
                     </Table>
                 </div>
-
             </div>
         )
     }

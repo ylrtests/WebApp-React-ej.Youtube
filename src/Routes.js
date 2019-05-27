@@ -4,8 +4,11 @@ import Producto from "./pages/producto/Producto"
 import ProductoCrear from "./pages/producto/ProductoCrear"
 import ProductoModificar from "./pages/producto/ProductoModificar"
 import Home from "./pages/Home"
+import Index from "./pages/Index"
 import AuthenticatedComponent from "./components/AuthenticatedComponent"
 import Login from "./components/Login"
+import Navigation from "./components/Navigation"
+import Logout from "./components/Logout"
 
 class Routes extends Component {
 
@@ -45,7 +48,7 @@ class Routes extends Component {
                     >
                         <Switch>
                             <Route path="/login" exact component={Login} />
-                            <Route path="/" exact component={Home} />
+                            <Route path="/" exact component={Index} />
                             <Route render={() => <Redirect to="/login" />} />
                         </Switch>
 
@@ -56,6 +59,9 @@ class Routes extends Component {
         console.log(">> Loggeado")
         return (
             <div>
+                
+                <Navigation />
+
                 <AuthenticatedComponent
                     changeEstadoUsuario={e => this.changeEstadoUsuario(e)}
                     userIsVerified={this.state.userIsVerified}
@@ -64,13 +70,20 @@ class Routes extends Component {
 
                     <Switch>
                         <Route path="/login" exact render={() => <Redirect to="/" />} />
-                        <Route path="/" exact component={() => <div>Hola home logeado</div>} />
-                        <Route path="/home" exact component={Home} />
+                        <Route path="/" exact component={Home} /> 
                         <Route path="/producto" exact component={Producto} />
                         <Route path="/producto/crear" component={ProductoCrear} exact />
                         <Route path="/producto/modificar/:id" component={ProductoModificar} exact />
+                        
+                        {/* Log out */}
+                        <Route path="/logout" exact 
+                            render={(props) => <Logout {...props}  
+                                    changeEstadoUsuario={e => this.changeEstadoUsuario(e)} />}
+                        />
+
                         <Route render={() => <Redirect to="/" />} />
                     </Switch>
+
 
                 </AuthenticatedComponent>
 

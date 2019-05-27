@@ -14,7 +14,7 @@ class Home extends React.Component {
 
         return (
             <div>
-                Home 
+                Home - loggeado
             </div>
         )
     }
