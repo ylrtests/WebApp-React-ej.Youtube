@@ -3,6 +3,7 @@ import axios from 'axios'
 import { URL, getToken } from "./../../config/config"
 import { Table } from 'reactstrap'
 import SweetAlert from 'sweetalert-react'
+import LoadingIcon from "./../../components/LoadingIcon"
 
 
 class Producto extends Component {
@@ -25,6 +26,7 @@ class Producto extends Component {
     }
 
     componentDidMount() {
+        this._mounted = true
         this.getProductos()
     }
 
@@ -38,13 +40,13 @@ class Producto extends Component {
         }).then((response) => {
             let datos = response.data;
 
-            if (datos.success) {
+            if (datos.success &&  this._mounted) {
                 this.setState({
                     productos: datos.products
                 })
             }
             else {
-                console.log("success falso");
+                //console.log("success falso");
             }
 
         });
@@ -61,7 +63,7 @@ class Producto extends Component {
         }).then((response) => {
             let datos = response.data;
 
-            if (datos.success) {
+            if (datos.success &&  this._mounted) {
                 console.log(datos);
                 this.setState({
                     sweetShow: true,
@@ -85,11 +87,13 @@ class Producto extends Component {
                 //let updatedProductos = Object.assign([],this.state.productos)
                 let updatedProductos = JSON.parse(JSON.stringify(this.state.productos));
                 updatedProductos[index] = producto
-
-                this.setState({
-                    productos: updatedProductos
-                })
-
+                
+                if( this._mounted){
+                    this.setState({
+                        productos: updatedProductos
+                    })
+    
+                }
             }
             else {
                 console.log("success falso");
@@ -145,8 +149,7 @@ class Producto extends Component {
         return (
             <tr>
                 <td colSpan="7" className="text-center">
-                    <object width="100" height="100" type="image/svg+xml" data="img/loading.svg">
-                    </object>
+                    <LoadingIcon />
                 </td>
             </tr>
         )
@@ -193,6 +196,10 @@ class Producto extends Component {
 
             </div>
         )
+    }
+
+    componentWillUnmount(){
+        this._mounted = false;
     }
 }
 

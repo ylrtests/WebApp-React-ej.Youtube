@@ -4,16 +4,19 @@ import axios from 'axios'
 import {URL,getToken} from "./../config/config"
 
 class CategoriasProductoSelect extends Component {
-
+    
     constructor(props) {
         super(props)
 
         this.state = {
             categorias: []
         }
+
     }
 
     componentDidMount(){
+        this._mounted = true;
+
         axios({
             method: 'get',
             url: URL+'/categories/select',
@@ -23,13 +26,13 @@ class CategoriasProductoSelect extends Component {
           }).then( (response) => {
                 let datos = response.data;
 
-                if(datos.success){
+                if(datos.success && this._mounted){
                     this.setState({
                         categorias:datos.categorias
                     })
                 }
                 else{
-                    console.log("success falso");
+                    //console.log("success falso");
                 }
                 
           });
@@ -54,6 +57,10 @@ class CategoriasProductoSelect extends Component {
                 {listaCategorias}
             </Field>
         )
+    }
+
+    componentWillUnmount(){
+        this._mounted = false;
     }
 }
 

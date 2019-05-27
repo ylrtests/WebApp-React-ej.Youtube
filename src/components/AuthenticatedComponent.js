@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { getToken, URL } from "./../config/config"
 import axios from "axios"
+import LoadingIcon from "./LoadingIcon"
 
 
 class AuthenticatedComponent extends Component {
@@ -55,8 +56,10 @@ class AuthenticatedComponent extends Component {
         if(this.props.isLoading){
             console.log("Verificando usuario...")
             return(
-                <div>
-                    Loading...
+                <div className="container">
+                    <div className="row h-100 justify-content-center align-items-center">
+                        <LoadingIcon type="ellipsis"/>
+                    </div>
                 </div>
             )
         }
