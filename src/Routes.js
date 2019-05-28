@@ -1,8 +1,6 @@
 import React, { Component } from "react"
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Producto from "./pages/producto/Producto"
-import ProductoCrear from "./pages/producto/ProductoCrear"
-import ProductoModificar from "./pages/producto/ProductoModificar"
 import Home from "./pages/Home"
 import Index from "./pages/Index"
 import AuthenticatedComponent from "./components/AuthenticatedComponent"
@@ -72,8 +70,6 @@ class Routes extends Component {
                         <Route path="/login" exact render={() => <Redirect to="/" />} />
                         <Route path="/" exact component={Home} /> 
                         <Route path="/producto" exact component={Producto} />
-                        <Route path="/producto/crear" component={ProductoCrear} exact />
-                        <Route path="/producto/modificar/:id" component={ProductoModificar} exact />
                         
                         {/* Log out */}
                         <Route path="/logout" exact 

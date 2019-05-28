@@ -1,9 +1,13 @@
 import React, { Component } from "react"
 import axios from 'axios'
 import { URL, getToken } from "./../../config/config"
-import { Table } from 'reactstrap'
+import { Table, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import SweetAlert from 'sweetalert-react'
 import LoadingIcon from "./../../components/LoadingIcon"
+import ProductoCrear from "./ProductoCrear"
+import ProductoModificar from "./ProductoModificar"
+
+let contador = 0
 
 class Producto extends Component {
 
@@ -12,15 +16,26 @@ class Producto extends Component {
 
         this.state = {
             productos: [],
-            showSweetAlert: false,
-            sweetTitle: '',
-            sweetText: '',
-            sweetType: ''
+            productoEditar: {},
+            modal: false,
+            modalCreate: false,
+            modalEdit: false,
+            modalTitle: '',
+            sweetAlert: {
+                sweetShow: false,
+                sweetTitle: '',
+                sweetText: '',
+                sweetType: ''
+            }
         }
 
-        this.listarProductos = this.listarProductos.bind(this)
         this.getProductos = this.getProductos.bind(this)
         this.cambiarEstadoProducto = this.cambiarEstadoProducto.bind(this)
+        this.editarProducto = this.editarProducto.bind(this)
+        this.listarProductos = this.listarProductos.bind(this)
+        this.cargarIconoEspera = this.cargarIconoEspera.bind(this)
+        this.toggleModal = this.toggleModal.bind(this);
+        this.showSweetAlert = this.showSweetAlert.bind(this);
 
     }
 
@@ -39,7 +54,7 @@ class Producto extends Component {
         }).then((response) => {
             let datos = response.data;
 
-            if (datos.success &&  this._mounted) {
+            if (datos.success && this._mounted) {
                 this.setState({
                     productos: datos.products
                 })
@@ -47,7 +62,7 @@ class Producto extends Component {
             else {
                 //console.log("success falso");
             }
-        }).catch( (err) => {
+        }).catch((err) => {
             this.props.history.push("/logout")
         });
     }
@@ -63,7 +78,7 @@ class Producto extends Component {
         }).then((response) => {
             let datos = response.data;
 
-            if (datos.success &&  this._mounted) {
+            if (datos.success && this._mounted) {
                 console.log(datos);
                 this.setState({
                     sweetShow: true,
@@ -87,12 +102,12 @@ class Producto extends Component {
                 //let updatedProductos = Object.assign([],this.state.productos)
                 let updatedProductos = JSON.parse(JSON.stringify(this.state.productos));
                 updatedProductos[index] = producto
-                
-                if( this._mounted){
+
+                if (this._mounted) {
                     this.setState({
                         productos: updatedProductos
                     })
-    
+
                 }
             }
             else {
@@ -104,8 +119,24 @@ class Producto extends Component {
 
     }
 
-    editarProducto(productoId){
-        this.props.history.push('/producto/modificar/'+productoId)
+    editarProducto(productoId) {
+        // Busca Index del producto al que se debe editar.
+        const index = this.state.productos.findIndex((item) => {
+            return item.id === productoId
+        })
+        // Encuentra el producto dentro de la lista de this.state.productos
+         let producto = JSON.parse(JSON.stringify(this.state.productos[index]));
+
+         console.log("Esto que es...")
+         console.log(producto)
+
+         this.setState({
+            productoEditar: producto,
+            modal: true,
+            modalCreate: false,
+            modalEdit: true,
+            modalTitle: 'Editar producto - '+producto.name,
+        })
     }
 
     listarProductos(producto) {
@@ -123,20 +154,22 @@ class Producto extends Component {
                             producto.status === 1 ?
                                 <div className="col-6">
                                     <button className="btn btn-danger "
-                                            onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Inactivar
+                                        onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Inactivar
                                     </button>
                                 </div>
                                 :
                                 <div className="col-6">
                                     <button className="btn btn-success "
-                                            onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Activar
+                                        onClick={() => { this.cambiarEstadoProducto(producto.id) }}>Activar
                                     </button>
                                 </div>
                         }
 
                         <div className="col-6">
                             <button className="btn btn-primary "
-                                    onClick={() => {this.editarProducto(producto.id)}}>Editar
+                                onClick={() => { 
+                                    this.editarProducto(producto.id)
+                                    }}>Editar
                             </button>
                         </div>
                     </div>
@@ -155,12 +188,50 @@ class Producto extends Component {
         )
     }
 
+    toggleModal() {
+        console.log("Hago tooggle del modal :D")
+        this.setState(prevState => ({
+            modal: !prevState.modal
+        }));
+    }
+
+    showSweetAlert(datos){
+        console.log(":::::::::::::::::::")
+        console.log(datos)
+
+        let updatedSweetAlert = JSON.parse(JSON.stringify(this.state.sweetAlert));
+        console.log(updatedSweetAlert)
+        updatedSweetAlert.sweetTitle = "Mensaje"
+        updatedSweetAlert.sweetShow = true
+        updatedSweetAlert.sweetText = datos.message
+        updatedSweetAlert.sweetType = datos.success ? "success" : "error"
+        
+        if(datos.success){
+            this.setState({
+                modal:false,
+                sweetAlert:updatedSweetAlert
+            })
+    
+            this.getProductos()
+        }
+        else{
+            this.setState({
+                sweetAlert:updatedSweetAlert
+            })
+        }
+    }
+
     render() {
+        console.log("Hago render..."+(contador++))
         let listaProductos;
+        let modalComponent;
 
         if (this.state.productos.length > 0) {
             listaProductos = this.state.productos.map(this.listarProductos)
         }
+
+        if (this.state.modalCreate) { modalComponent = <ProductoCrear showSweetAlert={this.showSweetAlert} /> }
+        else if (this.state.modalEdit) { modalComponent = <ProductoModificar showSweetAlert={this.showSweetAlert} productoEditar={this.state.productoEditar}/>}
 
         return (
             <div className="container">
@@ -168,13 +239,43 @@ class Producto extends Component {
                     <h1>Lista de productos</h1>
                 </div>
 
+                <div className="row mb-4">
+                    <Button color="success"
+                        onClick={() => {
+                            this.toggleModal()
+                            this.setState({
+                                modalCreate: true,
+                                modalEdit: false,
+                                modalTitle: 'Crear producto',
+                            })
+                        }}>
+                        Crear
+                    </Button>
+                </div>
+
+                <Modal isOpen={this.state.modal} toggle={this.toggleModal} className="">
+                    <ModalHeader toggle={this.toggleModal}>{this.state.modalTitle}</ModalHeader>
+                    <ModalBody>
+                        {modalComponent}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={this.toggleModal}>Cancelar</Button>
+                    </ModalFooter>
+                </Modal>
+
                 <div className="row">
                     <SweetAlert
-                        show={this.state.sweetShow}
-                        title={this.state.sweetTitle}
-                        text={this.state.sweetText}
-                        success
-                        onConfirm={() => this.setState({ sweetShow: false })}
+                        show={this.state.sweetAlert.sweetShow}
+                        title={this.state.sweetAlert.sweetTitle}
+                        text={this.state.sweetAlert.sweetText}
+                        animation="slide-from-top"
+                        type={this.state.sweetAlert.sweetType}
+                        onConfirm={() => {
+                            let updatedSweetAlert = JSON.parse(JSON.stringify(this.state.sweetAlert));
+                            updatedSweetAlert.sweetShow = false
+                            this.setState({sweetAlert: updatedSweetAlert})
+                            }  
+                        }
                     />
                     <Table bordered striped>
                         <thead>
@@ -197,7 +298,7 @@ class Producto extends Component {
         )
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this._mounted = false;
     }
 }

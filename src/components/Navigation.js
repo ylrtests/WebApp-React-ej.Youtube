@@ -35,19 +35,12 @@ class Navigation extends Component {
         return (
             <div>
                 <Navbar color="light" light expand="md">
-                    <Nav className="ml-auto" navbar>
-                        <NavItem>
-                            <Link className="nav-link" to="/">App</Link>
-                        </NavItem>
-                    </Nav>
+                    <Link className="navbar-brand" to="/">WebApp React</Link>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
                                 <Link className="nav-link" to="/producto">Productos</Link>
-                            </NavItem>
-                            <NavItem>
-                                <Link className="nav-link" to="/producto/crear">Crear Productos</Link>
                             </NavItem>
                             <UncontrolledDropdown nav inNavbar>
                                 <DropdownToggle nav caret>

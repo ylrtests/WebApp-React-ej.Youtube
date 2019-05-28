@@ -52,7 +52,7 @@ class CategoriasProductoSelect extends Component {
         }
 
         return (
-            <Field className="form-control col-md-6" component="select" name="category_id">
+            <Field className="form-control" component="select" name="category_id">
                 <option hidden  >Seleccionar</option>
                 {listaCategorias}
             </Field>
