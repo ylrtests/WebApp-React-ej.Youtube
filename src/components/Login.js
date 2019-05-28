@@ -1,10 +1,21 @@
-import React,{Component} from "react"
+import React, { Component } from "react"
 import axios from 'axios'
 import { URL } from "./../config/config"
+import { Formik, Form, Field } from 'formik'
+import * as Yup from 'yup'
+import './login.css'
+
+const LoginSchema = Yup.object().shape({
+    email: Yup.string()
+        .email('Email no válido'),
+    password: Yup.string()
+        .min(6, 'Contraseña demasiada corta')
+        .max(20, 'Se ha excedido el número de caracteres')
+})
 
 class Login extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
 
         this.state = {
@@ -12,47 +23,87 @@ class Login extends Component {
             "password": ""
         }
 
-        this.change = this.change.bind(this)
-        this.submit = this.submit.bind(this)
-    }
-    
-    change(e){
-        this.setState({
-            //Con esta sintaxis obtiene el nombre de la propiedad y le asigna el valor
-            [e.target.name]: e.target.value
-        })
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    submit(e){
-        e.preventDefault()
+
+    handleSubmit(values) {
+
+        console.log("Valores del formulario")
+        console.log(values)
+
         axios({
             method: 'post',
-            url: URL+'/login',
-            data: {
-                "email": this.state.email,
-                "password": this.state.password
-            }
+            url: URL + '/login',
+            data: values
         }).then((response) => {
             let datos = response.data;
             console.log(datos)
-            localStorage.setItem('jwt',datos.token)
+            localStorage.setItem('jwt', datos.token)
             this.props.history.go('/')
             this.props.history.push('/')
-            
+
         });
     }
 
-    render(){
-        return(
-            <div>
-                <form onSubmit={ e=> this.submit(e) }>
-                    <label>email</label>
-                    <input type="text"name="email" onChange={e => this.change(e)} value={this.state.email}/>
-                    <label>password</label>
-                    <input type="password" name="password"onChange={e => this.change(e)} value={this.state.password}/>
+    render() {
+        return (
+            <div className="container-fluid">
+                <div className="flex-container" >
+                    <div className="login-item">
+                        <h1 className="positionTitle">Iniciar sesión</h1>
+                        <div className="gapBottom"></div>
 
-                    <button type="submit">Iniciar sesión</button>
-                </form>
+                        <Formik
+                            initialValues={{
+                                email: this.state.email,
+                                password: this.state.email
+                            }}
+
+                            validationSchema={LoginSchema}
+                            onSubmit={(value) => {
+                                this.handleSubmit(value)
+                            }}
+                        >
+
+                            {({ errors, touched }) => (
+                                <Form>
+                                    <div className="row justify-content-center">
+                                        <div className="form-group adjustSize">
+                                            <label htmlFor="email"><strong>Email</strong></label>
+                                            <Field
+                                                name="email"
+                                                className="form-control"
+                                                type="email"
+                                            />
+                                            {errors.email && touched.name ? (
+                                                <div className="text-danger">{errors.email}</div>
+                                            ) : null}
+                                        </div>
+                                    </div>
+
+                                    <div className="row justify-content-center">
+                                        <div className="form-group adjustSize">
+                                            <label htmlFor="password"><strong>Password</strong></label>
+                                            <Field
+                                                name="password"
+                                                className="form-control"
+                                                type="password"
+                                            />
+                                            {errors.email && touched.name ? (
+                                                <div className="text-danger">{errors.email}</div>
+                                            ) : null}
+                                        </div>
+                                    </div>
+
+                                    <div className="row justify-content-center gapBottom">
+                                        <button className="btn btn-success adjustSize" type="submit">Iniciar Sesión</button>
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
+                    </div>
+                </div>
             </div>
         )
     }
