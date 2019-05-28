@@ -15,7 +15,8 @@ code {
 
 .borderForm{
   border: 1px outset whitesmoke;
-  padding: 2em;
-  margin: 2em;
+  padding: 20px;
+  margin: 20px;
+  background-color: white;
 }
 

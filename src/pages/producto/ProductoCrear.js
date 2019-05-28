@@ -34,7 +34,7 @@ class ProductoCrear extends Component {
         }
     }
 
-    handleForm(values) {
+    handleForm(values, {resetForm}) {
 
         console.log("Valores del formulario")
         console.log(values)
@@ -54,12 +54,15 @@ class ProductoCrear extends Component {
                     sweetTitle: 'Mensaje',
                     sweetText: datos.message
                 })
+                resetForm()
             }
             else {
                 console.log("success falso");
             }
 
-        });
+        }).catch( (err) => {
+            console.log("Error creando producto "+err)
+        })
     }
 
     render() {
@@ -88,8 +91,8 @@ class ProductoCrear extends Component {
                         quantity: ''
                     }}
                     validationSchema={ProductoSchema}
-                    onSubmit={(value) => {
-                        this.handleForm(value)
+                    onSubmit={(value, {resetForm}) => {
+                        this.handleForm(value, {resetForm})
                     }}
                 >
                     {({ errors, touched }) => (
