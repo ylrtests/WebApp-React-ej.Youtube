@@ -25,7 +25,7 @@ class Producto extends Component {
                 sweetShow: false,
                 sweetTitle: '',
                 sweetText: '',
-                sweetType: ''
+                sweetType: 'success'
             }
         }
 

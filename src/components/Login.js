@@ -7,10 +7,12 @@ import './login.css'
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
-        .email('Email no válido'),
+        .email('Email no válido')
+        .required('Email requerido'),
     password: Yup.string()
         .min(6, 'Contraseña demasiada corta')
         .max(20, 'Se ha excedido el número de caracteres')
+        .required('Email requerido')
 })
 
 class Login extends Component {

@@ -19,14 +19,14 @@ class AuthenticatedComponent extends Component {
         }
         else {
             axios({
-                method: 'post',
+                method: 'get',
                 url: URL + "/user",
-                data: {
-                    "token": jwt
+                headers: {
+                    "Authorization": 'bearer ' + getToken(),
                 }
             }).then((response) => {
                 let datos = response.data
-
+                console.log(datos)
                 //Verificación de usuario exitosa
                 if (datos.success) {
                     this.props.changeEstadoUsuario({
@@ -48,6 +48,12 @@ class AuthenticatedComponent extends Component {
 
             }).catch(err => {
                 console.log('Error autenticando usuario' + err)
+                localStorage.removeItem('jwt')
+                    this.props.changeEstadoUsuario({
+                        userIsVerified: false,
+                        isLoading: false,
+                        user: undefined
+                    })
             })
         }
     }
