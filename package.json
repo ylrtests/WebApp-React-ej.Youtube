@@ -4,7 +4,7 @@
   "private": true,
   "proxy": "http://API-Rest-Laravel-YS:8080/api",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "boostrap": "^2.0.0",
     "bootstrap": "^4.3.1",
     "formik": "^1.5.7",
